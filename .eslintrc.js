@@ -47,6 +47,7 @@ module.exports = {
     ],
     'global-require': 0,
     'max-len': ['error', { code: 120, comments: 130 }],
+    'no-plusplus': 0,
     'import/prefer-default-export': 0,
     'react/prop-types': 0,
     'react/jsx-props-no-spreading': 'off',

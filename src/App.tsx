@@ -10,6 +10,7 @@ import { setDarkMode } from '../store/system';
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
+import ViewportProvider from './underpin/ViewportProvider';
 
 export default function App(): React.ReactElement | null {
   const isLoadingComplete = useCachedResources();
@@ -26,10 +27,12 @@ export default function App(): React.ReactElement | null {
     <AppearanceProvider>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <SafeAreaProvider>
-            <Navigation colorScheme={colorScheme} />
-            <StatusBar />
-          </SafeAreaProvider>
+          <ViewportProvider>
+            <SafeAreaProvider>
+              <Navigation colorScheme={colorScheme} />
+              <StatusBar />
+            </SafeAreaProvider>
+          </ViewportProvider>
         </PersistGate>
       </Provider>
     </AppearanceProvider>
