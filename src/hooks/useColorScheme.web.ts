@@ -1,5 +1,8 @@
-// useColorScheme from react-native does not support web currently. You can replace
-// this with react-native-appearance if you would like theme support on web.
-export default function useColorScheme(): string {
-  return 'light';
-}
+import { Appearance, useColorScheme } from 'react-native-appearance';
+
+/**
+ * Get the current color scheme
+ */
+Appearance.getColorScheme();
+
+export default useColorScheme;
