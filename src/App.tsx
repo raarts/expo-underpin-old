@@ -3,7 +3,8 @@ import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AppearanceProvider } from 'react-native-appearance';
 import { Provider } from 'react-redux';
-import store from '../store';
+import { PersistGate } from 'redux-persist/integration/react';
+import store, { persistor } from '../store';
 import { setDarkMode } from '../store/system';
 
 import useCachedResources from './hooks/useCachedResources';
@@ -24,10 +25,12 @@ export default function App(): React.ReactElement | null {
   return (
     <AppearanceProvider>
       <Provider store={store}>
-        <SafeAreaProvider>
-          <Navigation colorScheme={colorScheme} />
-          <StatusBar />
-        </SafeAreaProvider>
+        <PersistGate loading={null} persistor={persistor}>
+          <SafeAreaProvider>
+            <Navigation colorScheme={colorScheme} />
+            <StatusBar />
+          </SafeAreaProvider>
+        </PersistGate>
       </Provider>
     </AppearanceProvider>
   );
