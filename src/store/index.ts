@@ -7,7 +7,7 @@ import { FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE } from 'redux-persist
 import systemReducer from './system';
 
 const rootReducer = combineReducers({
-  darkMode: systemReducer,
+  system: systemReducer,
 });
 export type RootState = ReturnType<typeof rootReducer>;
 

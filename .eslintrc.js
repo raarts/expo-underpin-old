@@ -2,9 +2,11 @@ module.exports = {
   env: {
     browser: true,
     es2020: true,
+    'react-native/react-native': true,
   },
   extends: [
     'plugin:react/recommended',
+    'plugin:react-native/all',
     'airbnb',
     'plugin:jest/recommended',
     'plugin:jest/style',
@@ -34,6 +36,7 @@ module.exports = {
         extensions: ['.js', '.ts', '.tsx'],
       },
     },
+    'react-native/style-sheet-object-names': ['ThemeProvider'],
   },
   rules: {
     'import/extensions': [
@@ -53,5 +56,7 @@ module.exports = {
     'react/jsx-props-no-spreading': 'off',
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.ts', '.tsx'] }],
     'no-use-before-define': ['error', { variables: false, functions: false }],
+    'react-native/no-color-literals': 0,
+    'react-native/sort-styles': 0,
   },
 };
