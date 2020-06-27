@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Text, TextProps } from './Themed';
+import { Text } from 'react-native';
 import ThemeProvider, { applyTheme } from '../underpin/ThemeProvider';
 
-export function MonoText(props: TextProps): React.ReactElement {
+export function MonoText(props: Text['props']): React.ReactElement {
   const { style } = props;
   const styles = applyTheme(localStyles);
   return <Text {...props} style={[style, styles.text]} />;
@@ -11,6 +11,7 @@ export function MonoText(props: TextProps): React.ReactElement {
 const styles = ThemeProvider.create({
   text: {
     fontFamily: 'space-mono',
+    color: '$textColor',
   },
 });
 const localStyles = styles;
