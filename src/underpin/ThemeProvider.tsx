@@ -37,11 +37,12 @@ const ThemeProvider = ({ children }: Props): React.ReactElement => {
 
 const applyTheme = (spec: AnyObject): AnyObject => {
   const { viewportFormFactor, viewportOrientation, viewportScale } = useViewport();
+  const { theme, darkMode } = useSelector((state: RootState) => state.system);
 
   const layoutDataWithScale = { ...styles, $scale: viewportScale, ...spec };
   return useMemo(() => {
     return EStyleSheet.create(layoutDataWithScale);
-  }, [viewportFormFactor, viewportOrientation, viewportScale, spec]);
+  }, [theme, darkMode, viewportFormFactor, viewportOrientation, viewportScale, spec]);
 };
 
 // Dummy function, but it allows checking unused styles with eslint-plugin-react-native/no-unused-styles
