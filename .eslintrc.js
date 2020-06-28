@@ -59,5 +59,6 @@ module.exports = {
     'react-native/no-color-literals': 0,
     'react-native/sort-styles': 0,
     '@typescript-eslint/camelcase': 'off',
+    '@typescript-eslint/ban-ts-comment': ['error', { 'ts-nocheck': 'allow-with-description' }],
   },
 };

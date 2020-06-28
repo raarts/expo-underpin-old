@@ -1,3 +1,4 @@
+// @ts-nocheck onMouseEnter and setNativeProps cannot be typed correctly currently
 import { MaterialTopTabBarProps } from '@react-navigation/material-top-tabs/src/types';
 import { TouchableOpacity, View, Text } from 'react-native';
 import Animated from 'react-native-reanimated';
@@ -11,15 +12,12 @@ export default function MenuBar({ state, descriptors, navigation }: MaterialTopT
   const { viewportOrientation, viewportFormFactor } = useViewport();
   const styles = applyTheme(baseStyles);
 
-  // console.log('MenuBar: state: ', state);
-  // console.log('MenuBar: descriptors: ', descriptors);
-  // console.log(state.index);
   return (
     <View style={styles.menuBarContainer}>
       {viewportOrientation !== 'portrait' && viewportFormFactor !== 'phone' && <Text>Logo</Text>}
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
-        const textRef = React.useRef<Text>(null);
+        const textRef = React.useRef<Animated.Text | null>(null);
         const label = options.title !== undefined ? options.title : route.name;
         const isSelected = state.index === index;
 
@@ -49,8 +47,16 @@ export default function MenuBar({ state, descriptors, navigation }: MaterialTopT
             testID={options.tabBarTestID}
             onPress={onPress}
             style={styles.touchableOpacity}
-            onMouseEnter={(): void => textRef.current.setNativeProps({ style: EStyleSheet.flatten(hoverTextStyle) })}
-            onMouseLeave={(): void => textRef.current.setNativeProps({ style: EStyleSheet.flatten(textStyle) })}
+            onMouseEnter={(): void => {
+              if (textRef.current) {
+                textRef.current.setNativeProps({ style: EStyleSheet.flatten(hoverTextStyle) });
+              }
+            }}
+            onMouseLeave={(): void => {
+              if (textRef.current) {
+                textRef.current.setNativeProps({ style: EStyleSheet.flatten(textStyle) });
+              }
+            }}
           >
             <Animated.Text
               ref={(ref): void => {
