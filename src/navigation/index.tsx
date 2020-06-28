@@ -10,8 +10,6 @@ import LinkingConfiguration from './LinkingConfiguration';
 import ThemeProvider from '../underpin/ThemeProvider';
 import { RootState } from '../store';
 
-// If you are not familiar with React Navigation, we recommend going through the
-// "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
 export default function Navigation(): React.ReactElement {
   const { darkMode } = useSelector((state: RootState) => state.system);
 
@@ -32,8 +30,6 @@ export default function Navigation(): React.ReactElement {
   );
 }
 
-// A root stack navigator is often used for displaying modals on top of all other content
-// Read more here: https://reactnavigation.org/docs/modal
 const Stack = createStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
