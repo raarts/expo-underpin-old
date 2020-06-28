@@ -5,7 +5,7 @@ import { AppearanceProvider } from 'react-native-appearance';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import store, { persistor } from './store';
-import { setDarkMode, themeBuild } from './store/system';
+import { setDarkMode } from './store/system';
 
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
@@ -27,17 +27,11 @@ export default function App(): React.ReactElement | null {
   return (
     <AppearanceProvider>
       <Provider store={store}>
-        <PersistGate
-          loading={null}
-          onBeforeLift={(): void => {
-            store.dispatch(themeBuild());
-          }}
-          persistor={persistor}
-        >
+        <PersistGate loading={null} persistor={persistor}>
           <ViewportProvider>
             <ThemeProvider>
               <SafeAreaProvider>
-                <Navigation colorScheme={colorScheme} />
+                <Navigation />
                 <StatusBar />
               </SafeAreaProvider>
             </ThemeProvider>
