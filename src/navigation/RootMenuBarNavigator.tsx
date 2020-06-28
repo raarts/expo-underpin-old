@@ -8,6 +8,7 @@ import Tab1StackNavigator from './Tab1StackNavigator';
 import Tab2StackNavigator from './Tab2StackNavigator';
 import Tab3StackNavigator from './Tab3StackNavigator';
 import { useViewport } from '../underpin/ViewportProvider';
+import HomeStackNavigator from './HomeStackNavigator';
 
 const TopMenu = createMaterialTopTabNavigator();
 const INITIAL_ROUTE_NAME = 'MenuOne';
@@ -26,6 +27,13 @@ export default function RootMenuBarNavigator(): React.ReactElement {
         duration: 1, // milliseconds
       }}
     >
+      <TopMenu.Screen
+        name="MenuHome"
+        component={HomeStackNavigator}
+        options={{
+          title: 'Home',
+        }}
+      />
       <TopMenu.Screen
         name="MenuOne"
         component={Tab1StackNavigator}

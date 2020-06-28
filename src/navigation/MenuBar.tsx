@@ -1,75 +1,50 @@
-// @ts-nocheck onMouseEnter and setNativeProps cannot be typed correctly currently
 import { MaterialTopTabBarProps } from '@react-navigation/material-top-tabs/src/types';
-import { TouchableOpacity, View, Text } from 'react-native';
-import Animated from 'react-native-reanimated';
+import { View } from 'react-native';
 import * as React from 'react';
 import { ReactElement } from 'react';
-import EStyleSheet from '@raarts/react-native-extended-stylesheet';
 import ThemeProvider, { applyTheme } from '../underpin/ThemeProvider';
-import { useViewport } from '../underpin/ViewportProvider';
+import { useKeycloakAuthentication } from '../underpin/KeycloakAuthentication';
+import MenuBarButton from './MenuBarButton';
+import MenuLoginLogoutButton from './MenuLoginLogoutButton';
 
 export default function MenuBar({ state, descriptors, navigation }: MaterialTopTabBarProps): ReactElement {
-  const { viewportOrientation, viewportFormFactor } = useViewport();
+  const keycloak = useKeycloakAuthentication();
   const styles = applyTheme(baseStyles);
 
   return (
     <View style={styles.menuBarContainer}>
-      {viewportOrientation !== 'portrait' && viewportFormFactor !== 'phone' && <Text>Logo</Text>}
-      {state.routes.map((route, index) => {
-        const { options } = descriptors[route.key];
-        const textRef = React.useRef<Animated.Text | null>(null);
-        const label = options.title !== undefined ? options.title : route.name;
-        const isSelected = state.index === index;
+      <View style={styles.leftMenuContainer}>
+        {state.routes.map((route, index) => {
+          const isSelected = state.index === index;
+          const anynomousMenus = ['MenuHome'];
 
-        const onPress = (): void => {
-          const event = navigation.emit({
-            type: 'tabPress',
-            target: route.key,
-            canPreventDefault: true,
-          });
-
-          if (!isSelected && !event.defaultPrevented) {
-            navigation.navigate(route.name);
+          const onPress = (): void => {
+            const event = navigation.emit({
+              type: 'tabPress',
+              target: route.key,
+              canPreventDefault: true,
+            });
+            if (!isSelected && !event.defaultPrevented) {
+              navigation.navigate(route.name);
+            }
+          };
+          if (!anynomousMenus.includes(route.name) && keycloak.loginState !== 'loggedin') {
+            return null;
           }
-        };
-
-        const textStyle = [styles.textStyle];
-        let hoverTextStyle = [...textStyle];
-        hoverTextStyle.push(styles.textStyleHover);
-        if (isSelected) {
-          textStyle.push(styles.selectedTextStyle);
-          hoverTextStyle = [...textStyle];
-          hoverTextStyle.push(styles.selectedHoverTextStyle);
-        }
-        return (
-          <TouchableOpacity
-            key={route.key}
-            testID={options.tabBarTestID}
-            onPress={onPress}
-            style={styles.touchableOpacity}
-            onMouseEnter={(): void => {
-              if (textRef.current) {
-                textRef.current.setNativeProps({ style: EStyleSheet.flatten(hoverTextStyle) });
-              }
-            }}
-            onMouseLeave={(): void => {
-              if (textRef.current) {
-                textRef.current.setNativeProps({ style: EStyleSheet.flatten(textStyle) });
-              }
-            }}
-          >
-            <Animated.Text
-              ref={(ref): void => {
-                textRef.current = ref;
-              }}
-              numberOfLines={1}
-              style={textStyle}
-            >
-              {label}
-            </Animated.Text>
-          </TouchableOpacity>
-        );
-      })}
+          return (
+            <MenuBarButton
+              key={route.key}
+              isSelected={isSelected}
+              options={descriptors[route.key].options}
+              routeName={route.name}
+              onPress={onPress}
+            />
+          );
+        })}
+      </View>
+      <View style={styles.rightMenuContainer}>
+        <MenuLoginLogoutButton />
+      </View>
     </View>
   );
 }
@@ -77,33 +52,26 @@ export default function MenuBar({ state, descriptors, navigation }: MaterialTopT
 const styles = ThemeProvider.create({
   menuBarContainer: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: 40,
+    backgroundColor: '$menuBarColor',
+  },
+  leftMenuContainer: {
+    flex: 1,
+    flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
     height: 40,
     backgroundColor: '$menuBarColor',
   },
-  touchableOpacity: {
+  rightMenuContainer: {
     flex: 1,
-    maxWidth: 100,
-    marginLeft: 12,
-    marginRight: 2,
-  },
-  textStyle: {
-    textAlign: 'center',
-    color: '$textColor',
-    padding: 6,
-    borderRadius: 2,
-    fontSize: 16,
-  },
-  textStyleHover: {
-    color: '$textColor',
-  },
-  selectedTextStyle: {
-    color: '$menuSelectedTextColor',
-    backgroundColor: '$menuSelectedBackgroundColor',
-  },
-  selectedHoverTextStyle: {
-    color: '$textColor',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    height: 40,
+    backgroundColor: '$menuBarColor',
   },
 });
 const baseStyles = styles;
