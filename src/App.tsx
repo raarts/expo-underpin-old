@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useReducer } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AppearanceProvider } from 'react-native-appearance';
 import { Provider } from 'react-redux';
@@ -13,6 +13,7 @@ import useColorScheme from './hooks/useColorScheme';
 import ViewportProvider from './underpin/ViewportProvider';
 import ThemeProvider from './underpin/ThemeProvider';
 import Navigation from './navigation';
+import ErrorBoundary from './underpin/ErrorBoundary';
 
 // How to extend the RootNavigator concept to apply to multiple form factors and orientations
 // import PortraitPhoneRootStackNavigator from './navigation/portrait/phone/RootStackNavigator';
@@ -40,6 +41,7 @@ import Navigation from './navigation';
 enableScreens();
 
 export default function App(): React.ReactElement | null {
+  const [, forceUpdate] = useReducer((x) => x + 1, 0);
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
 
@@ -60,10 +62,12 @@ export default function App(): React.ReactElement | null {
         <PersistGate loading={null} persistor={persistor}>
           <ViewportProvider>
             <ThemeProvider>
-              <SafeAreaProvider>
-                <Navigation />
-                <StatusBar />
-              </SafeAreaProvider>
+              <ErrorBoundary forceReload={forceUpdate}>
+                <SafeAreaProvider>
+                  <Navigation />
+                  <StatusBar />
+                </SafeAreaProvider>
+              </ErrorBoundary>
             </ThemeProvider>
           </ViewportProvider>
         </PersistGate>
