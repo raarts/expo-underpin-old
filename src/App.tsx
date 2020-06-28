@@ -14,6 +14,7 @@ import ViewportProvider from './underpin/ViewportProvider';
 import ThemeProvider from './underpin/ThemeProvider';
 import Navigation from './navigation';
 import ErrorBoundary from './underpin/ErrorBoundary';
+import KeycloakAuthentication from './underpin/KeycloakAuthentication';
 
 // How to extend the RootNavigator concept to apply to multiple form factors and orientations
 // import PortraitPhoneRootStackNavigator from './navigation/portrait/phone/RootStackNavigator';
@@ -63,10 +64,15 @@ export default function App(): React.ReactElement | null {
           <ViewportProvider>
             <ThemeProvider>
               <ErrorBoundary forceReload={forceUpdate}>
-                <SafeAreaProvider>
-                  <Navigation />
-                  <StatusBar />
-                </SafeAreaProvider>
+                <KeycloakAuthentication
+                  urlDiscovery={process.env.KEYCLOAK_DISCOVERY_URL || ''}
+                  clientId={process.env.CLIENTID || ''}
+                >
+                  <SafeAreaProvider>
+                    <Navigation />
+                    <StatusBar />
+                  </SafeAreaProvider>
+                </KeycloakAuthentication>
               </ErrorBoundary>
             </ThemeProvider>
           </ViewportProvider>

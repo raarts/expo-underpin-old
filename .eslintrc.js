@@ -58,5 +58,6 @@ module.exports = {
     'no-use-before-define': ['error', { variables: false, functions: false }],
     'react-native/no-color-literals': 0,
     'react-native/sort-styles': 0,
+    '@typescript-eslint/camelcase': 'off',
   },
 };
