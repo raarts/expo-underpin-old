@@ -9,9 +9,31 @@ import { setDarkMode } from './store/system';
 
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
-import Navigation from './navigation';
 import ViewportProvider from './underpin/ViewportProvider';
 import ThemeProvider from './underpin/ThemeProvider';
+import Navigation from './navigation';
+
+// How to extend the RootNavigator concept to apply to multiple form factors and orientations
+// import PortraitPhoneRootStackNavigator from './navigation/portrait/phone/RootStackNavigator';
+// import PortraitTabletRootStackNavigator from './navigation/portrait/tablet/RootStackNavigator';
+// import PortraitMonitorRootStackNavigator from './navigation/portrait/monitor/RootStackNavigator';
+//
+// import LandscapePhoneRootStackNavigator from './navigation/landscape/phone/RootStackNavigator';
+// import LandscapeTabletRootStackNavigator from './navigation/landscape/tablet/RootStackNavigator';
+// import LandscapeMonitorRootStackNavigator from './navigation/landscape/monitor/RootStackNavigator';
+//
+// const rootNavMatrix = {
+//   portrait: {
+//     phone: PortraitPhoneRootStackNavigator,
+//     tablet: PortraitTabletRootStackNavigator,
+//     monitor: PortraitMonitorRootStackNavigator,
+//   },
+//   landscape: {
+//     phone: LandscapePhoneRootStackNavigator,
+//     tablet: LandscapeTabletRootStackNavigator,
+//     monitor: LandscapeMonitorRootStackNavigator,
+//   },
+// };
 
 export default function App(): React.ReactElement | null {
   const isLoadingComplete = useCachedResources();
@@ -24,6 +46,10 @@ export default function App(): React.ReactElement | null {
   if (!isLoadingComplete) {
     return null;
   }
+
+  // How to extend the RootNavigator concept to apply to multiple form factors and orientations
+  // const { orientation, screenFormFactor } = useViewport();
+  // const RootStackNavigator = rootNavMatrix[orientation][screenFormFactor];
   return (
     <AppearanceProvider>
       <Provider store={store}>
