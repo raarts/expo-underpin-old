@@ -1,4 +1,3 @@
-// eslint-disable-file react/jsx-key
 import * as React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 

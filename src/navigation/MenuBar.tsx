@@ -29,6 +29,9 @@ export default function MenuBar({ state, descriptors, navigation }: MaterialTopT
             }
           };
           if (!anynomousMenus.includes(route.name) && keycloak.loginState !== 'loggedin') {
+            if (isSelected) {
+              navigation.navigate('MenuHome');
+            }
             return null;
           }
           return (
