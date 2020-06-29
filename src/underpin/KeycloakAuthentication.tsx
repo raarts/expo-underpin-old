@@ -2,12 +2,13 @@ import React, { ReactElement } from 'react';
 import * as WebBrowser from 'expo-web-browser';
 import * as AuthSession from 'expo-auth-session';
 import { makeRedirectUri } from 'expo-auth-session';
-import { Alert, Platform } from 'react-native';
+import { ActivityIndicator, Alert, Platform, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import formUrlEncode from './utils/formUrlEncode';
 import { setIdentityFromAuthCode, clearIdentity, LoginState, setLoginState } from '../store/identity';
 import { RootState } from '../store';
 import { AuthCodeResponse } from './utils/oidc.types';
+import ThemeProvider, { applyTheme } from './ThemeProvider';
 
 export const keycloak = {
   context: null as KeycloakAuthenticationType | null,
@@ -36,9 +37,10 @@ type Props = {
   children: ReactElement;
   urlDiscovery: string;
   clientId: string;
+  indicator?: boolean;
 };
 
-const KeycloakAuthentication = ({ children, urlDiscovery, clientId }: Props): ReactElement => {
+const KeycloakAuthentication = ({ children, urlDiscovery, clientId, indicator }: Props): ReactElement => {
   const dispatch = useDispatch();
   const identity = useSelector((state: RootState) => state.identity);
   const [working, setWorking] = React.useState<boolean>(false);
@@ -231,6 +233,14 @@ const KeycloakAuthentication = ({ children, urlDiscovery, clientId }: Props): Re
     // eslint-disable-next-line no-console
     console.log(keycloak.context);
   }
+  const styles = applyTheme(localStyles);
+  if (indicator && working) {
+    return (
+      <View style={styles.activity}>
+        <ActivityIndicator size="large" color={ThemeProvider.value('$tintColor')} />
+      </View>
+    );
+  }
   return (
     <KeycloakAuthenticationContext.Provider value={keycloak.context}>{children}</KeycloakAuthenticationContext.Provider>
   );
@@ -242,3 +252,13 @@ export function useKeycloakAuthentication(): KeycloakAuthenticationType {
   const context = React.useContext(KeycloakAuthenticationContext);
   return context as KeycloakAuthenticationType;
 }
+
+const styles = ThemeProvider.create({
+  activity: {
+    flex: 1,
+    backgroundColor: 'darkgrey',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
+const localStyles = styles;

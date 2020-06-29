@@ -65,6 +65,7 @@ export default function App(): React.ReactElement | null {
             <ThemeProvider>
               <ErrorBoundary forceReload={forceUpdate}>
                 <KeycloakAuthentication
+                  indicator
                   urlDiscovery={process.env.KEYCLOAK_DISCOVERY_URL || ''}
                   clientId={process.env.CLIENTID || ''}
                 >
