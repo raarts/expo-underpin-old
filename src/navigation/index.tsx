@@ -27,7 +27,7 @@ export default function Navigation(): React.ReactElement {
         const initialUrl = await Linking.getInitialURL();
 
         if (Platform.OS !== 'web') {
-          if (initialUrl == null || initialUrl === 'exp://127.0.0.1:19000') {
+          if (initialUrl == null || initialUrl.startsWith('exp://')) {
             // Only restore state if there's no deep link and we're not on web
             const savedStateString = await AsyncStorage.getItem(PERSISTENCE_KEY);
             const state = savedStateString ? JSON.parse(savedStateString) : undefined;

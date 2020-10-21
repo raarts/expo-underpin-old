@@ -47,14 +47,18 @@ const KeycloakAuthentication = ({ children, urlDiscovery, clientId, indicator }:
   const [code, setCode] = React.useState<string>('');
   const [codeVerifier, setCodeVerifier] = React.useState<string>('');
   const discovery = AuthSession.useAutoDiscovery(urlDiscovery);
+  const redirectUri = AuthSession.makeRedirectUri({
+    native: 'underpin://redirect',
+  });
+
+  // eslint-disable-next-line no-console
+  console.log(redirectUri);
   const [request, response, promptAsync] = AuthSession.useAuthRequest(
     {
       clientId,
       extraParams: { nonce: 'skjDgeF5sG' },
       scopes: ['openid'],
-      redirectUri: AuthSession.makeRedirectUri({
-        native: 'underpin://redirect',
-      }),
+      redirectUri,
     },
     discovery,
   );
